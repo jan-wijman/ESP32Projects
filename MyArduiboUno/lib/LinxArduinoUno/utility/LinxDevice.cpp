@@ -23,7 +23,7 @@ LinxDevice::LinxDevice()
 {
 	DeviceFamily = 0xFE;
 	DeviceId = 0x00;	
-	ListenerBufferSize = 128;
+	ListenerBufferSize = 150;
 }
 
 LinxDevice::~LinxDevice()

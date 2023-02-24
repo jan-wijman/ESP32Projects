@@ -17,6 +17,9 @@
 #include <EEPROM.h>
 #include <Servo.h>
 
+// Compiler switches
+#define LINX_DEVICE_FAMILY   2
+
 //Include Device Specific Header From Sketch>>Import Library (In This Case LinxChipkitMax32.h)
 //Also Include Desired LINX Listener From Sketch>>Import Library (In This Case LinxSerialListener.h)
 #include <LinxArduinoUno.h>

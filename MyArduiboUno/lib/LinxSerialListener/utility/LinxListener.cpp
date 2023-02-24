@@ -115,7 +115,7 @@ void LinxListener::StatusResponse(unsigned char* commandPacketBuffer, unsigned c
 int LinxListener::ProcessCommand(unsigned char* commandPacketBuffer, unsigned char* responsePacketBuffer)
 {
 	//Store Some Local Values For Convenience
-	unsigned int command = commandPacketBuffer[4] << 8 | commandPacketBuffer[5];
+	unsigned int command = (unsigned int)commandPacketBuffer[4] << 8 | (unsigned int)commandPacketBuffer[5];
 	
 	int status = L_OK;
 	
@@ -167,7 +167,7 @@ int LinxListener::ProcessCommand(unsigned char* commandPacketBuffer, unsigned ch
 		
 		case 0x0006: //Set UART Listener Interface Max Baud
 		{
-			unsigned long targetBaud = (unsigned long)((unsigned long)(commandPacketBuffer[6] << 24) | (unsigned long)(commandPacketBuffer[7] << 16) | (unsigned long)(commandPacketBuffer[8] << 8) | (unsigned long)commandPacketBuffer[9]);
+			unsigned long targetBaud = (unsigned long)((unsigned long)((unsigned long)commandPacketBuffer[6] << 24) | (unsigned long)((unsigned long)commandPacketBuffer[7] << 16) | (unsigned long)((unsigned long)commandPacketBuffer[8] << 8) | (unsigned long)commandPacketBuffer[9]);
 			unsigned long actualBaud = 0;
 			status = LinxDev->UartSetBaudRate(ListenerChan, targetBaud, &actualBaud);
 			LinxDev->DelayMs(1000);
@@ -234,7 +234,7 @@ int LinxListener::ProcessCommand(unsigned char* commandPacketBuffer, unsigned ch
 		
 		
 		case 0x0014: //Set Device Ethernet IP
-			LinxDev->ethernetIp = (commandPacketBuffer[6]<<24) | (commandPacketBuffer[7]<<16) | (commandPacketBuffer[8]<<8) | (commandPacketBuffer[9]);
+			LinxDev->ethernetIp = ((unsigned long)commandPacketBuffer[6]<<24) | ((unsigned long)commandPacketBuffer[7]<<16) | ((unsigned long)commandPacketBuffer[8]<<8) | ((unsigned long)commandPacketBuffer[9]);
 			LinxDev->NonVolatileWrite(NVS_ETHERNET_IP, commandPacketBuffer[6]);
 			LinxDev->NonVolatileWrite(NVS_ETHERNET_IP+1, commandPacketBuffer[7]);
 			LinxDev->NonVolatileWrite(NVS_ETHERNET_IP+2, commandPacketBuffer[8]);
@@ -264,7 +264,7 @@ int LinxListener::ProcessCommand(unsigned char* commandPacketBuffer, unsigned ch
 			break;
 		
 		case 0x0018: //Set Device WIFI IP
-			LinxDev->WifiIp = (commandPacketBuffer[6]<<24) | (commandPacketBuffer[7]<<16) | (commandPacketBuffer[8]<<8) | (commandPacketBuffer[9]);
+			LinxDev->WifiIp = ((unsigned long)commandPacketBuffer[6]<<24) | ((unsigned long)commandPacketBuffer[7]<<16) | ((unsigned long)commandPacketBuffer[8]<<8) | ((unsigned long)commandPacketBuffer[9]);
 			LinxDev->NonVolatileWrite(NVS_WIFI_IP, commandPacketBuffer[6]);
 			LinxDev->NonVolatileWrite(NVS_WIFI_IP+1, commandPacketBuffer[7]);
 			LinxDev->NonVolatileWrite(NVS_WIFI_IP+2, commandPacketBuffer[8]);
