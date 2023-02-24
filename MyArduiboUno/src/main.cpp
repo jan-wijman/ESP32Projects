@@ -1,4 +1,3 @@
-#include <Arduino.h>
 /****************************************************************************************	
 **  This is example LINX firmware for use with the Arduino Uno with the serial 
 **  interface enabled.
@@ -12,6 +11,7 @@
 ****************************************************************************************/
 
 //Include All Peripheral Libraries Used By LINX
+#include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <EEPROM.h>
@@ -33,7 +33,7 @@ void setup()
 {
   //Instantiate The LINX Device
   LinxDevice = new LinxArduinoUno();
-  
+  LinxDevice->EnableDebug(0);
   //The LINXT Listener Is Pre Instantiated, Call Start And Pass A Pointer To The LINX Device And The UART Channel To Listen On
   LinxSerialConnection.Start(LinxDevice, 0);  
 }

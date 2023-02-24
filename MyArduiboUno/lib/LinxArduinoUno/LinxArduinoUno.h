@@ -39,8 +39,8 @@
 /****************************************************************************************
 **  Includes
 ****************************************************************************************/	
-#include "utility/LinxDevice.h"
-#include "utility/LinxWiringDevice.h"
+//#include "utility/LinxDevice.h"
+//#include "utility/LinxWiringDevice.h"
 #include "utility/LinxArduino.h"
 	
 class LinxArduinoUno : public LinxArduino
