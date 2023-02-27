@@ -14,14 +14,16 @@
 #include <LinxESP32.h>
 #include <Arduino.h>
 //Create A Pointer To The LINX Device Object We Instantiate In Setup()
-LinxESP32* LinxDevice;
+LinxESP32* pLinxDevice;
+//LinxESP32WifiListener* LinxWifiConnection;
 
 //Initialize LINX Device And Listener
 void setup()
 {
   //Instantiate The LINX Device
-  LinxDevice = new LinxESP32();
-  LinxDevice->EnableDebug(0);
+  //LinxWifiConnection = new (LinxESP32WifiListener);
+  pLinxDevice = new LinxESP32();
+  pLinxDevice->EnableDebug(DEBUG_ENABLED);
   
   // PWM & Servo Setup
   uint8_t pwmList[] = {};         // Max16Ch {0, 26, ...}
@@ -42,13 +44,17 @@ void setup()
   //LinxWifiConnection.SetSsid("VI Technologies");
   //LinxWifiConnection.SetSecurity(WPA2_PASSPHRASE);  //NONE, WPA2_PASSPHRASE, WPA2_KEY, WEP40, WEO104
   //LinxWifiConnection.SetPassphrase("3942074321882926");
+
   LinxWifiConnection.SetSsid("PandaGrote");
   LinxWifiConnection.SetSecurity(WPA2_PASSPHRASE);  //NONE, WPA2_PASSPHRASE, WPA2_KEY, WEP40, WEO104
   LinxWifiConnection.SetPassphrase("Zbroggbvgw-1");
 
   //Start With Fixed Port.  When Using This Method You Cannot Update The Port Using LINX VIs
-  LinxWifiConnection.Start(LinxDevice, 44300);
-  LinxWifiConnection.PrintWifiInfo();
+  LinxWifiConnection.Start(pLinxDevice, 44300);
+  delay(1000);
+  //pLinxDevice->EnableDebug(0);
+  //LinxWifiConnection.PrintWifiInfo();
+  pLinxDevice->EnableDebug(DEBUG_ENABLED);
 }
 
 void loop()

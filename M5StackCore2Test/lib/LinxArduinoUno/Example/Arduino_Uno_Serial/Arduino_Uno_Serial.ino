@@ -11,43 +11,35 @@
 ****************************************************************************************/
 
 //Include All Peripheral Libraries Used By LINX
-#include <Arduino.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <EEPROM.h>
 #include <Servo.h>
 
-// Compiler switches
-#define LINX_DEVICE_FAMILY   2
-
 //Include Device Specific Header From Sketch>>Import Library (In This Case LinxChipkitMax32.h)
 //Also Include Desired LINX Listener From Sketch>>Import Library (In This Case LinxSerialListener.h)
-#include <M5Core2.h>
-#include <LinxArduinoUno.h>
-#include <LinxSerialListener.h>
+#include <utility/LinxArduinoUno.h>
+#include <utility/LinxSerialListener.h>
+ 
 //Create A Pointer To The LINX Device Object We Instantiate In Setup()
-LinxArduinoUno* pLinxDevice;
+LinxArduinoUno* LinxDevice;
 
 //Initialize LINX Device And Listener
 void setup()
 {
   //Instantiate The LINX Device
-  M5.begin(true,false,true,false,kMBusModeInput);
+  LinxDevice = new LinxArduinoUno();
   
-  pLinxDevice = new LinxArduinoUno();
-  //pLinxDevice->EnableDebug(DEBUG_ENABLED);
   //The LINXT Listener Is Pre Instantiated, Call Start And Pass A Pointer To The LINX Device And The UART Channel To Listen On
-  LinxSerialConnection.Start(pLinxDevice, 0);  
-  
+  LinxSerialConnection.Start(LinxDevice, 0);  
 }
 
 void loop()
 {
   //Listen For New Packets From LabVIEW
   LinxSerialConnection.CheckForCommands();
-  delay(10);
-  //Your Code Here, But It will Slow Down The Connection With LabVIEW
-  M5.Lcd.print(".");
   
+  //Your Code Here, But It will Slow Down The Connection With LabVIEW
 }
+
 
