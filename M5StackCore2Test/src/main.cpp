@@ -23,10 +23,10 @@
 //Include Device Specific Header From Sketch>>Import Library (In This Case LinxChipkitMax32.h)
 //Also Include Desired LINX Listener From Sketch>>Import Library (In This Case LinxSerialListener.h)
 #include <M5Core2.h>
-#include <LinxArduinoUno.h>
+#include <LinxM5Core2.h>
 #include <LinxSerialListener.h>
 //Create A Pointer To The LINX Device Object We Instantiate In Setup()
-LinxArduinoUno* pLinxDevice;
+LinxM5Core2* pLinxDevice;
 
 //Initialize LINX Device And Listener
 void setup()
@@ -34,7 +34,7 @@ void setup()
   //Instantiate The LINX Device
   M5.begin(true,false,true,false,kMBusModeInput);
   
-  pLinxDevice = new LinxArduinoUno();
+  pLinxDevice = new LinxM5Core2();
   //pLinxDevice->EnableDebug(DEBUG_ENABLED);
   //The LINXT Listener Is Pre Instantiated, Call Start And Pass A Pointer To The LINX Device And The UART Channel To Listen On
   LinxSerialConnection.Start(pLinxDevice, 0);  

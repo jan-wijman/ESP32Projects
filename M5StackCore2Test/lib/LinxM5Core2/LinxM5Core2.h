@@ -45,7 +45,7 @@
 //#include "utility/LinxWiringDevice.h"
 #include "utility/LinxArduino.h"
 	
-class LinxArduinoUno : public LinxArduino
+class LinxM5Core2 : public LinxArduino
 {
 	public:	
 		/****************************************************************************************
@@ -88,9 +88,9 @@ class LinxArduinoUno : public LinxArduino
 		/****************************************************************************************
 		**  Constructors /  Destructor
 		****************************************************************************************/
-		LinxArduinoUno();
+		LinxM5Core2();
 		
-		~LinxArduinoUno();
+		~LinxM5Core2();
 			
 		/****************************************************************************************
 		**  Functions
