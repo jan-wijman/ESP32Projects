@@ -24,13 +24,13 @@ void setup()
   pLinxDevice->EnableDebug(DEBUG_ENABLED);
   
   //PWM & Servo Setup
-  uint8_t pwmList[] = {};         // Max16Ch {0, 26, ...}
-  uint16_t pwmFrequency = 12000;  // LED:12000, Servo:50
-  for (int i = 0; i < sizeof(pwmList); i++) {
-    ledcSetup(i, pwmFrequency, 8);
-    pinMode(pwmList[i], OUTPUT);
-    ledcAttachPin(pwmList[i], i);
-  }
+  //uint8_t pwmList[] = {};         // Max16Ch {0, 26, ...}
+  //uint16_t pwmFrequency = 12000;  // LED:12000, Servo:50
+  //for (int i = 0; i < sizeof(pwmList); i++) {
+  //  ledcSetup(i, pwmFrequency, 8);
+  //  pinMode(pwmList[i], OUTPUT);
+  //  ledcAttachPin(pwmList[i], i);
+  //}
 
   // I2C Begin ch0:Wire, ch1:Wire1
   //Wire.begin();
