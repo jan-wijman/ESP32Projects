@@ -13,6 +13,8 @@
 //Also Include Desired LINX Listener From Sketch>>Import Library (In This Case LinxESP32WifiListener.h)
 #include <LinxESP32.h>
 #include <Arduino.h>
+#define GO_FOR_WIFI
+
 //Create A Pointer To The LINX Device Object We Instantiate In Setup()
 LinxESP32* pLinxDevice;
 
@@ -24,7 +26,7 @@ void setup()
   pLinxDevice->EnableDebug(DEBUG_ENABLED);
   
   //PWM & Servo Setup
-  //uint8_t pwmList[] = {};         // Max16Ch {0, 26, ...}
+  //uint8_t pwmList[NUM_SPI_CHANS] = {0,1,2,3};         // Max16Ch {0, 26, ...}
   //uint16_t pwmFrequency = 12000;  // LED:12000, Servo:50
   //for (int i = 0; i < sizeof(pwmList); i++) {
   //  ledcSetup(i, pwmFrequency, 8);
@@ -49,7 +51,6 @@ void setup()
 
   //Start With Fixed Port.  When Using This Method You Cannot Update The Port Using LINX VIs
   LinxWifiConnection.Start(pLinxDevice, 44300);
-  delay(1000);
   pLinxDevice->EnableDebug(DEBUG_ENABLED);
 }
 

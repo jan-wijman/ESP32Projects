@@ -175,6 +175,7 @@ int LinxESP32WifiListener::Init()
       //No Security
       if (szSsid[0] == '\0') {
         LinxWifiConnectStatus = WiFi.begin();
+  
       } else {
         LinxWifiConnectStatus = WiFi.begin(szSsid);
       }
@@ -182,8 +183,8 @@ int LinxESP32WifiListener::Init()
     case WPA2_PASSPHRASE:
       //WPA2 Passphrase
       LinxWifiConnectStatus = WiFi.begin(szSsid, szPassPhrase);
-      break;
-    case WPA2_KEY:
+
+      case WPA2_KEY:
       //WPA2 Key  --Untested--
       //LinxWifiConnectStatus = deIPcK.wfConnect(szSsid, szPassPhrase, &LinxTcpStatus);
       break;

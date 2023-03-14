@@ -15,18 +15,21 @@
 /****************************************************************************************
 **  Defines
 ****************************************************************************************/
+#define DEVICE_FAMILY 0xAE //7
 #define DEVICE_NAME_LEN 8
 
-#define NUM_AI_CHANS 40
+#define NUM_AI_CHANS 18
 #define AI_RES_BITS 12
 #define AI_REFV 3300000
 #define NUM_AI_INT_REFS 0
 
-#define NUM_DIGITAL_CHANS 40
+#define NUM_AO_CHANS 2
+
+#define NUM_DIGITAL_CHANS 26
 
 #define NUM_PWM_CHANS 16
 
-#define NUM_SPI_CHANS 1
+#define NUM_SPI_CHANS 3
 #define NUM_SPI_SPEEDS 7
 
 #define NUM_I2C_CHANS 2
@@ -61,6 +64,7 @@ class LinxESP32 : public LinxWiringDevice
     static const int m_AiRefCodes[NUM_AI_INT_REFS];
 
     //AO
+    static const unsigned char m_AoChans[NUM_AO_CHANS];
     //None
 
     //DIGITAL
