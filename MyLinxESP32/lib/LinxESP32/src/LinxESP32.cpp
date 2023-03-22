@@ -25,16 +25,23 @@
 const unsigned char LinxESP32::m_DeviceName[DEVICE_NAME_LEN] = "ESP32";
 
 //AI
-const unsigned char LinxESP32::m_AiChans[NUM_AI_CHANS] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
+// Only ADC 1 because of WiFi ADC2 does not work
+const unsigned char LinxESP32::m_AiChans[NUM_AI_CHANS] = {36,37,38,39,32,33,34,35,4,0,2,15,13,12,14,27,25,26}; 
 const unsigned long LinxESP32::m_AiRefIntVals[NUM_AI_INT_REFS] = {};
 const int LinxESP32::m_AiRefCodes[NUM_AI_INT_REFS] = {};
 
 //AO
-const unsigned char LinxESP32::m_AoChans[NUM_AO_CHANS] = {0, 1};
+const unsigned char LinxESP32::m_AoChans[NUM_AO_CHANS] = {25, 26}; // here is are pins
+const unsigned char LinxESP32::m_AoResolution = AO_RES_BITS ;
+const unsigned long LinxESP32::m_AoRefDefault = AO_REFV;
+const unsigned long LinxESP32::m_AoRefSet = AO_REFV;
 //None
 
 //DIGITAL
-const unsigned char LinxESP32::m_DigitalChans[NUM_DIGITAL_CHANS] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
+// GPIO's 6, 7, 8, 9, 10, 11 are used by build in flash
+const unsigned char LinxESP32::m_DigitalChans[NUM_DIGITAL_CHANS] = {0, 1, 2, 3, 4, 5, 12, 
+                                                                      13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 
+                                                                      ,26, 27, 28, 29, 30, 31 ,32, 33, 34, 35, 36, 37, 38, 39  };
 
 //PWM
 const unsigned char LinxESP32::m_PwmChans[NUM_PWM_CHANS] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
@@ -94,9 +101,12 @@ LinxESP32::LinxESP32()
   AiRefExtMax = 5000000;
 
   //AO
-  NumAoChans = 0;
-  AoChans = 0;
-
+  NumAoChans = NUM_AO_CHANS;
+  AoChans = m_AoChans;
+  AoResolution = m_AoResolution;
+  AoRefDefault = m_AoRefDefault;
+  AoRefSet = m_AoRefSet;
+  
   //PWM
   NumPwmChans = NUM_PWM_CHANS;
   PwmChans = m_PwmChans;

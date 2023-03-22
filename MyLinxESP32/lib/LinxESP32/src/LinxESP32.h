@@ -24,8 +24,10 @@
 #define NUM_AI_INT_REFS 0
 
 #define NUM_AO_CHANS 2
+#define AO_RES_BITS 8
+#define AO_REFV 3300000
 
-#define NUM_DIGITAL_CHANS 26
+#define NUM_DIGITAL_CHANS 34 // normaly 40 // GPIO's 6, 7, 8, 9, 10, 11 are used by build in flash
 
 #define NUM_PWM_CHANS 16
 
@@ -34,7 +36,7 @@
 
 #define NUM_I2C_CHANS 2
 
-#define NUM_UART_CHANS 4
+#define NUM_UART_CHANS 4 //inclusive BT
 #define NUM_UART_SPEEDS 13
 
 #define NUM_SERVO_CHANS NUM_PWM_CHANS
@@ -42,6 +44,7 @@
 /****************************************************************************************
 **  Includes
 ****************************************************************************************/
+#include <driver/dac.h>
 #include "esp32-hal-gpio.h"
 #include "utility/LinxDevice.h"
 #include "utility/LinxWiringDevice.h"
@@ -65,6 +68,10 @@ class LinxESP32 : public LinxWiringDevice
 
     //AO
     static const unsigned char m_AoChans[NUM_AO_CHANS];
+    static const unsigned char m_AoResolution ;
+    static const unsigned long m_AoRefDefault ;
+    static const unsigned long m_AoRefSet;
+    
     //None
 
     //DIGITAL

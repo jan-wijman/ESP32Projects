@@ -175,6 +175,19 @@ int LinxWiringDevice::AnalogSetRef(unsigned char mode, unsigned long voltage)
   }
   return L_OK;
 }
+int LinxWiringDevice::AnalogWrite(unsigned char numChans, unsigned char* channels, unsigned char* values)
+{
+  for (int i = 0; i < numChans; i++)
+  {
+    
+    //pinMode(channels[i], ANALOG);
+    dacWrite( channels[i], (values[i]));
+    DebugPrint("Channel:");DebugPrintln((int)channels[i]);
+    DebugPrint("Value:"); DebugPrintln((int)values[i]);
+  }
+
+  return L_OK;
+}
 
 //--------------------------------------------------------DIGITAL-------------------------------------------------------
 

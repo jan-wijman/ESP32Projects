@@ -55,6 +55,7 @@ class LinxWiringDevice : public LinxDevice
     //Analog
     virtual int AnalogRead(unsigned char numChans, unsigned char* channels, unsigned char* values);
     virtual int AnalogSetRef(unsigned char mode, unsigned long voltage);
+    virtual int AnalogWrite(unsigned char numChans, unsigned char* channels, unsigned char* values);				
 
     //DIGITAL
     virtual int DigitalWrite(unsigned char numChans, unsigned char* channels, unsigned char* values);

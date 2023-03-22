@@ -210,14 +210,14 @@ int LinxESP32WifiListener::Init()
       LinxWifiConnectStatus = WiFi.status();
     }
   }
-Serial.print("Further then waiting");
+Serial.println("Further then waiting");
 delay(1);
   //Connect To Network
   if (LinxWifiConnectStatus == WL_CONNECTED)
   {
-    Serial.print("");
-    Serial.print("Connected To Wifi Network");
-    Serial.print("Waiting for server");
+    Serial.println("");
+    Serial.println("Connected To Wifi Network");
+    Serial.println("Waiting for server");
     delay(10000);
     m_pWifiSvr = new WiFiServer(LinxWifiPort);
 

@@ -238,7 +238,8 @@ class LinxDevice
     virtual int AnalogRead(unsigned char numChans, unsigned char* channels, unsigned char* values) = 0;
     virtual int AnalogReadNoPacking(unsigned char numChans, unsigned char* channels, unsigned long* values);		//Values Are ADC Ticks And Not Bit Packed
     virtual int AnalogSetRef(unsigned char mode, unsigned long voltage) = 0;
-
+    virtual int AnalogWrite(unsigned char numChans, unsigned char* channels, unsigned char* values) = 0;				
+    
     //DIGITAL
     virtual int DigitalWrite(unsigned char numChans, unsigned char* channels, unsigned char* values) = 0;				//Values Are Bit Packed
     virtual int DigitalWriteNoPacking(unsigned char numChans, unsigned char* channels, unsigned char* values);		//Values Are Not Bit Packed

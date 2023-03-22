@@ -15,6 +15,14 @@
 #include <Arduino.h>
 #define GO_FOR_WIFI
 
+
+// List of custom commands for the ESP32
+// First command is just as an example.
+int myCustomCommand(unsigned char numInputBytes, unsigned char* input, unsigned char* numResponseBytes, unsigned char* response);
+int getAOResolution(unsigned char numInputBytes, unsigned char* input, unsigned char* numResponseBytes, unsigned char* response);
+int getAORef(unsigned char numInputBytes, unsigned char* input, unsigned char* numResponseBytes, unsigned char* response);
+int SetAO(unsigned char numInputBytes, unsigned char* input, unsigned char* numResponseBytes, unsigned char* response);
+
 //Create A Pointer To The LINX Device Object We Instantiate In Setup()
 LinxESP32* pLinxDevice;
 
@@ -38,9 +46,10 @@ void setup()
   //Wire.begin();
   //Wire1.begin(32, 33);
 
-  // The LINX Listener Is Pre Instantiated.
-  // Set SSID (Network Name), Security Type, Passphrase/Key, And Call Start With Desired Device IP and Port
-  // If not set, it will connect with the last connection information
+  //The LINX Listener Is Pre Instantiated.
+  //Set SSID (Network Name), Security Type, Passphrase/Key, And Call Start With Desired Device IP and Port
+  //If not set, it will connect with the last connection information
+  
   LinxWifiConnection.SetSsid("VI Technologies");
   LinxWifiConnection.SetSecurity(WPA2_PASSPHRASE);  //NONE, WPA2_PASSPHRASE, WPA2_KEY, WEP40, WEO104
   LinxWifiConnection.SetPassphrase("3942074321882926");
@@ -52,6 +61,13 @@ void setup()
   //Start With Fixed Port.  When Using This Method You Cannot Update The Port Using LINX VIs
   LinxWifiConnection.Start(pLinxDevice, 44300);
   pLinxDevice->EnableDebug(DEBUG_ENABLED);
+
+  
+  LinxWifiConnection.AttachCustomCommand(0, myCustomCommand);
+  LinxWifiConnection.AttachCustomCommand(1, getAOResolution);
+  LinxWifiConnection.AttachCustomCommand(2, getAORef);
+  LinxWifiConnection.AttachCustomCommand(3, SetAO);
+
 }
 
 void loop()
@@ -61,4 +77,51 @@ void loop()
 
   //Your Code Here, But It will Slow Down The Connection With LabVIEW
   
+}
+
+//
+int myCustomCommand(unsigned char numInputBytes, unsigned char* input, unsigned char* numResponseBytes, unsigned char* response)
+{
+   
+  for(int i=0; i<numInputBytes; i++)
+  {
+    response[i] = input[i] +1;
+  }
+   
+  *numResponseBytes = numInputBytes;
+  pLinxDevice->DebugPrint("NrOfInputBytes: ") ; pLinxDevice->DebugPrintln(numInputBytes);
+   
+  return L_OK;
+}
+int getAOResolution(unsigned char numInputBytes, unsigned char* input, unsigned char* numResponseBytes, unsigned char* response)
+{
+    response[0] = pLinxDevice->m_AoResolution;
+    *numResponseBytes = 1;
+    return L_OK;
+}
+int getAORef(unsigned char numInputBytes, unsigned char* input, unsigned char* numResponseBytes, unsigned char* response)
+{
+    response[0] = ((pLinxDevice->m_AoRefSet >>24) & 0xFF);
+    response[1] = ((pLinxDevice->m_AoRefSet >>16) & 0xFF);
+    response[2] = ((pLinxDevice->m_AoRefSet >>8) & 0xFF);
+    response[3] = ((pLinxDevice->m_AoRefSet) & 0xFF);
+    *numResponseBytes = 4;
+
+    return L_OK;
+}
+int SetAO(unsigned char numInputBytes, unsigned char* input, unsigned char* numResponseBytes, unsigned char* response)
+{
+ char numChannels;
+ unsigned char* channels; 
+ unsigned char* values;
+ 
+ numChannels = input[0];
+ channels = &input[1];
+ values = &input[1 + numChannels];
+for(int i= 0; i<numChannels; i++)
+{
+  dacWrite( channels[i], (values[i]));
+}
+
+return L_OK;
 }

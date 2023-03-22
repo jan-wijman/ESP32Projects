@@ -481,8 +481,17 @@ int LinxListener::ProcessCommand(unsigned char* commandPacketBuffer, unsigned ch
           break;
         }
 
-      //case 0x0065: //TODO Analog Write
-
+      /*
+      case 0x0065: //TODO Analog Write
+        {
+          // This was a try out. Moved to the custom commands
+          unsigned long voltage = (unsigned long)(((unsigned long)commandPacketBuffer[7] << 24) | ((unsigned long)commandPacketBuffer[8] << 16) | ((unsigned long)commandPacketBuffer[9] << 8) | ((unsigned long)commandPacketBuffer[10]));
+          status =  LinxDev->AnalogWrite(commandPacketBuffer[6], &commandPacketBuffer[7], &commandPacketBuffer[7 + commandPacketBuffer[6]]);
+          StatusResponse(commandPacketBuffer, responsePacketBuffer, status);
+          break;
+          
+        }
+      */
       //---0x0066 to 0x007F Reserved---
 
       /****************************************************************************************
