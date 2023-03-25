@@ -45,7 +45,7 @@ int LinxSerialListener::Start(LinxDevice* linxDev, unsigned char uartChan)
 	ListenerChan = uartChan;
 	unsigned long acutalBaud = 0;
 	ListenerChan = uartChan;
-	LinxDev->UartOpen(ListenerChan, 115200, &acutalBaud);
+	LinxDev->UartOpen(ListenerChan, 9600, &acutalBaud);
 	
 	State = CONNECTED;
 	return 0;
@@ -164,7 +164,7 @@ int LinxSerialListener::CheckForCommands()
 			return Start(LinxDev, ListenerChan);
 			break;
 		case CONNECTED:  
-			//LinxDev->DebugPrintln("State - Connected");
+			LinxDev->DebugPrintln("State - Connected");
 			return Connected();
 			break;
 		case CLOSE:    			

@@ -12,7 +12,7 @@
 /****************************************************************************************
 **  Includes
 ****************************************************************************************/
-#include <SPI.h>
+
 
 #include "utility/LinxDevice.h"
 #include "utility/LinxWiringDevice.h"
@@ -50,10 +50,14 @@ const unsigned char LinxESP32::m_PwmChans[NUM_PWM_CHANS] = {0, 1, 2, 3, 4, 5, 6,
 //None
 
 //SPI
-const unsigned char LinxESP32::m_SpiChans[NUM_SPI_CHANS] = {0,1,2};
+const unsigned char LinxESP32::m_SpiChans[NUM_SPI_CHANS] = {0,1};
 unsigned long LinxESP32::m_SpiSupportedSpeeds[NUM_SPI_SPEEDS] = {8000000, 4000000, 2000000, 1000000, 500000, 250000, 125000};
 int LinxESP32::m_SpiSpeedCodes[NUM_SPI_SPEEDS] = {SPI_CLOCK_DIV2, SPI_CLOCK_DIV4, SPI_CLOCK_DIV8, SPI_CLOCK_DIV16, SPI_CLOCK_DIV32, SPI_CLOCK_DIV64, SPI_CLOCK_DIV128};
 
+//uninitalised pointers to SPI objects. They are declared in the .h file. But here they must be initialised. This to avoid linker problems.
+SPIClass * LinxESP32::vspi = NULL;
+SPIClass * LinxESP32::hspi = NULL;
+   
 //I2C
 unsigned char LinxESP32::m_I2cChans[NUM_I2C_CHANS] = {0, 1};
 unsigned char LinxESP32::m_I2cRefCount[NUM_I2C_CHANS];
@@ -134,6 +138,8 @@ LinxESP32::LinxESP32()
   NumSpiSpeeds = NUM_SPI_SPEEDS;
   SpiSupportedSpeeds = m_SpiSupportedSpeeds;
   SpiSpeedCodes = m_SpiSpeedCodes;
+  vspi = new SPIClass(VSPI); // SPIClass(VSPI)
+  hspi = new SPIClass(HSPI); // SPIClass(HSPI)
 
   //CAN
   NumCanChans = 0;
@@ -163,3 +169,129 @@ LinxESP32::~LinxESP32()
 /****************************************************************************************
 **  Functions
 ****************************************************************************************/
+  SPIClass* LinxESP32::SPIChannel(unsigned char channel)
+  {
+    switch(channel)
+    {
+      case 0: {
+        return vspi;
+      }
+        break;
+
+      case 1: {
+         return hspi;
+      }
+        break;
+
+      default:{
+        return NULL;
+      }
+      break;
+    }
+  }
+
+
+int LinxESP32::SpiOpenMaster(unsigned char channel)
+{
+  
+  switch(channel)
+  {
+    case 0:
+    {
+      if(vspi == NULL){
+        vspi->begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS); //SCLK, MISO, MOSI, SS
+        pinMode(vspi->pinSS(), OUTPUT); //VSPI SS
+      }
+      break;
+    }
+    case 1: {
+      if(hspi == NULL){
+        hspi->begin(HSPI_SCLK, HSPI_MISO, HSPI_MOSI, HSPI_SS); //SCLK, MISO, MOSI, SS
+        pinMode(hspi->pinSS(), OUTPUT); //HSPI SS
+      }
+      break;
+    }
+    default:
+      break;
+  }
+  return 0;
+}
+
+int LinxESP32::SpiSetBitOrder(unsigned char channel, unsigned char bitOrder)
+{
+  
+  SPIChannel(channel)->setBitOrder(bitOrder);
+  return 0;
+}
+
+int LinxESP32::SpiSetMode(unsigned char channel, unsigned char mode)
+{
+  switch (mode)
+  {
+    case 0:
+      SPIChannel(channel)->setDataMode(SPI_MODE0);
+      break;
+    case 1:
+      SPIChannel(channel)->setDataMode(SPI_MODE1);
+      break;
+    case 2:
+      SPIChannel(channel)->setDataMode(SPI_MODE2);
+      break;
+    case 3:
+      SPIChannel(channel)->setDataMode(SPI_MODE3);
+      break;
+  }
+
+  return 0;
+}
+
+int LinxESP32::SpiSetSpeed(unsigned char channel, unsigned long speed, unsigned long* actualSpeed)
+{
+  //Loop Over All Supported SPI Speeds (SPI Speeds Should Be Fastest -> Slowest)
+  for (int index = 0; index < NumSpiSpeeds; index++)
+  {
+    //If Target Speed Is greater or equal to the current supported speed use current supported speed (it's the fastest supported speed that is less or equal to the target)
+    if (speed >= *(SpiSupportedSpeeds + index))
+    {
+      *actualSpeed = *(SpiSupportedSpeeds + index);
+      SPIChannel(channel)->setClockDivider(*(SpiSpeedCodes + index));
+      break;
+    }
+    if (index == NumSpiSpeeds - 1)
+    {
+      //Target speed is slower than slowest supported.  Use slowest supported
+      *actualSpeed = *(SpiSupportedSpeeds + index);
+      SPIChannel(channel)->setClockDivider(*(SpiSpeedCodes + index));
+    }
+  }
+
+  return L_OK;
+}
+
+int LinxESP32::SpiWriteRead(unsigned char channel, unsigned char frameSize, unsigned char numFrames, unsigned char csChan, unsigned char csLL, unsigned char* sendBuffer, unsigned char* recBuffer)
+{
+  //Set CS Pin As DO
+  pinMode(csChan, OUTPUT);
+
+  //Set CS Pin Idle Before Starting SPI Transfer
+  digitalWrite(csChan, (~csLL & 0x01) );
+
+  //Loop Over Frames
+  for (int i = 0; i < numFrames; i++)
+  {
+    //Start of frame, set CS Pin Active
+    digitalWrite(csChan, (csLL & 0x01) );
+
+    //Loop Over Bytes In Frame
+    for (int j = 0; j < frameSize; j++)
+    {
+      //Transfer Data
+      unsigned char byteNum = (i * frameSize) + j;
+      recBuffer[byteNum] = SPIChannel(channel)->transfer(sendBuffer[byteNum]);
+    }
+    //Frame Complete, Set CS idel
+    digitalWrite(csChan, (~csLL & 0x01) );
+  }
+  return 0;
+}
+

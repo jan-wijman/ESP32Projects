@@ -50,13 +50,13 @@ void setup()
   //Set SSID (Network Name), Security Type, Passphrase/Key, And Call Start With Desired Device IP and Port
   //If not set, it will connect with the last connection information
   
-  LinxWifiConnection.SetSsid("VI Technologies");
-  LinxWifiConnection.SetSecurity(WPA2_PASSPHRASE);  //NONE, WPA2_PASSPHRASE, WPA2_KEY, WEP40, WEO104
-  LinxWifiConnection.SetPassphrase("3942074321882926");
-
-  //LinxWifiConnection.SetSsid("PandaGrote");
+  //LinxWifiConnection.SetSsid("VI Technologies");
   //LinxWifiConnection.SetSecurity(WPA2_PASSPHRASE);  //NONE, WPA2_PASSPHRASE, WPA2_KEY, WEP40, WEO104
-  //LinxWifiConnection.SetPassphrase("Zbroggbvgw-1");
+  //LinxWifiConnection.SetPassphrase("3942074321882926");
+
+  LinxWifiConnection.SetSsid("PandaGrote");
+  LinxWifiConnection.SetSecurity(WPA2_PASSPHRASE);  //NONE, WPA2_PASSPHRASE, WPA2_KEY, WEP40, WEO104
+  LinxWifiConnection.SetPassphrase("Zbroggbvgw-1");
 
   //Start With Fixed Port.  When Using This Method You Cannot Update The Port Using LINX VIs
   LinxWifiConnection.Start(pLinxDevice, 44300);

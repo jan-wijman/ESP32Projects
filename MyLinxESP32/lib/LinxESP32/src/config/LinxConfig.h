@@ -23,5 +23,32 @@
 
 #define ARDUINO_VERSION 105
 
+// Define ALTERNATE_PINS to use non-standard GPIO pins for SPI bus
+
+#ifdef ALTERNATE_PINS
+  #define VSPI_MISO   2
+  #define VSPI_MOSI   4
+  #define VSPI_SCLK   0
+  #define VSPI_SS     33
+
+  #define HSPI_MISO   26
+  #define HSPI_MOSI   27
+  #define HSPI_SCLK   25
+  #define HSPI_SS     32
+#else
+  #define VSPI_MISO   19 //MISO
+  #define VSPI_MOSI   23 //MOSI
+  #define VSPI_SCLK   18 //SCK
+  #define VSPI_SS     5 //SS
+
+  #define HSPI_MISO   12
+  #define HSPI_MOSI   13
+  #define HSPI_SCLK   14
+  #define HSPI_SS     15
+#endif
+
+//#if CONFIG_IDF_TARGET_ESP32S2 || CONFIG_IDF_TARGET_ESP32S3
+//#define VSPI FSPI
+//#endif
 
 #endif //LINXCONFIG

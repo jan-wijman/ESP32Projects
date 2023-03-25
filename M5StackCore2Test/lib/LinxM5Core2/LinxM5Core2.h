@@ -9,8 +9,8 @@
 ** BSD2 License.
 ****************************************************************************************/	
 
-#ifndef LINX_ARDUINO_UNO_H
-#define LINX_ARDUINO_UNO_H
+#ifndef LINX_M5CORE2_H
+#define LINX_M5CORE2_H
 
 /****************************************************************************************
 **  Defines
@@ -113,4 +113,4 @@ class LinxM5Core2 : public LinxArduino
 };
 
 
-#endif //LINX_ARDUINO_UNO_H
+#endif //LINX_M5CORE2_H

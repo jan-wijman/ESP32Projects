@@ -31,8 +31,11 @@
 
 #define NUM_PWM_CHANS 16
 
-#define NUM_SPI_CHANS 3
+#define NUM_SPI_CHANS 2  // Only VSPI and HSPI exposed. The two internal ones are not used. 
 #define NUM_SPI_SPEEDS 7
+
+
+static const int spiClk = 1000000; // 1 MHz
 
 #define NUM_I2C_CHANS 2
 
@@ -51,6 +54,7 @@
 //#include "utility/LinxArduino.h"
 #include <LinxESP32WifiListener.h>
 #include <LinxSerialListener.h>
+//#include <SPI.h>
 
 class LinxESP32 : public LinxWiringDevice
 {
@@ -84,6 +88,12 @@ class LinxESP32 : public LinxWiringDevice
     static const unsigned char m_SpiChans[NUM_SPI_CHANS];
     static unsigned long m_SpiSupportedSpeeds[NUM_SPI_SPEEDS];
     static int m_SpiSpeedCodes[NUM_SPI_SPEEDS];
+         //uninitalised pointers to SPI objects
+    static SPIClass * vspi;
+    static SPIClass * hspi;
+    
+
+
 
     //I2C
     static unsigned char m_I2cChans[NUM_I2C_CHANS];
@@ -107,6 +117,11 @@ class LinxESP32 : public LinxWiringDevice
     **  Functions
     ****************************************************************************************/
     int AnalogSetRef(unsigned char mode, unsigned long voltage);
+    int SpiOpenMaster(unsigned char channel);
+    int SpiSetBitOrder(unsigned char channel, unsigned char bitOrder);
+    int SpiSetMode(unsigned char channel, unsigned char mode);
+    int SpiSetSpeed(unsigned char channel, unsigned long speed, unsigned long* actualSpeed);
+    int SpiWriteRead(unsigned char channel, unsigned char frameSize, unsigned char numFrames, unsigned char csChan, unsigned char csLL, unsigned char* sendBuffer, unsigned char* recBuffer);
 
   private:
     /****************************************************************************************
@@ -117,7 +132,7 @@ class LinxESP32 : public LinxWiringDevice
     /****************************************************************************************
     **  Functions
     ****************************************************************************************/
-
+  SPIClass* SPIChannel(unsigned char channel);
 
 };
 

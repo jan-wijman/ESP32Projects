@@ -28,6 +28,7 @@
 //Create A Pointer To The LINX Device Object We Instantiate In Setup()
 LinxM5Core2* pLinxDevice;
 
+unsigned long actualBandWidth;
 //Initialize LINX Device And Listener
 void setup()
 {
@@ -35,6 +36,8 @@ void setup()
   M5.begin(true,false,true,false,kMBusModeInput);
   
   pLinxDevice = new LinxM5Core2();
+  pLinxDevice->UartSetBaudRate(0,9600,&actualBandWidth);
+  M5.lcd.println(actualBandWidth,0);
   //pLinxDevice->EnableDebug(DEBUG_ENABLED);
   //The LINXT Listener Is Pre Instantiated, Call Start And Pass A Pointer To The LINX Device And The UART Channel To Listen On
   LinxSerialConnection.Start(pLinxDevice, 0);  
