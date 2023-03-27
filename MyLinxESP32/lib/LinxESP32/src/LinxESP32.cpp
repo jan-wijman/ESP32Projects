@@ -50,7 +50,7 @@ const unsigned char LinxESP32::m_PwmChans[NUM_PWM_CHANS] = {0, 1, 2, 3, 4, 5, 6,
 //None
 
 //SPI
-const unsigned char LinxESP32::m_SpiChans[NUM_SPI_CHANS] = {0,1};
+const unsigned char LinxESP32::m_SpiChans[NUM_SPI_CHANS] = {0,1}; // VSPI, HSPI
 unsigned long LinxESP32::m_SpiSupportedSpeeds[NUM_SPI_SPEEDS] = {8000000, 4000000, 2000000, 1000000, 500000, 250000, 125000};
 int LinxESP32::m_SpiSpeedCodes[NUM_SPI_SPEEDS] = {SPI_CLOCK_DIV2, SPI_CLOCK_DIV4, SPI_CLOCK_DIV8, SPI_CLOCK_DIV16, SPI_CLOCK_DIV32, SPI_CLOCK_DIV64, SPI_CLOCK_DIV128};
 
@@ -138,7 +138,7 @@ LinxESP32::LinxESP32()
   NumSpiSpeeds = NUM_SPI_SPEEDS;
   SpiSupportedSpeeds = m_SpiSupportedSpeeds;
   SpiSpeedCodes = m_SpiSpeedCodes;
-  vspi = new SPIClass(VSPI); // SPIClass(VSPI)
+  vspi = &SPI; // SPIClass(VSPI)
   hspi = new SPIClass(HSPI); // SPIClass(HSPI)
 
   //CAN
@@ -193,26 +193,30 @@ LinxESP32::~LinxESP32()
 
 int LinxESP32::SpiOpenMaster(unsigned char channel)
 {
-  
+  DebugPrintln("In the OpenMaster method.");
   switch(channel)
   {
     case 0:
     {
-      if(vspi == NULL){
-        vspi->begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS); //SCLK, MISO, MOSI, SS
-        pinMode(vspi->pinSS(), OUTPUT); //VSPI SS
-      }
-      break;
+      vspi->begin(VSPI_SCLK, VSPI_MISO, VSPI_MOSI, VSPI_SS); //SCLK, MISO, MOSI, SS
+      pinMode(vspi->pinSS(), OUTPUT); //VSPI SS
+      DebugPrintln("Channel 0 opened");
+      
     }
-    case 1: {
-      if(hspi == NULL){
-        hspi->begin(HSPI_SCLK, HSPI_MISO, HSPI_MOSI, HSPI_SS); //SCLK, MISO, MOSI, SS
-        pinMode(hspi->pinSS(), OUTPUT); //HSPI SS
-      }
-      break;
+    break;
+    case 1: 
+    {
+      hspi->begin(HSPI_SCLK, HSPI_MISO, HSPI_MOSI, HSPI_SS); //SCLK, MISO, MOSI, SS
+      pinMode(hspi->pinSS(), OUTPUT); //HSPI SS
+      DebugPrintln("Channel 1 opened");
     }
+    break;
     default:
-      break;
+    {
+        DebugPrintln("Channel not opened");
+      
+    }
+    break;
   }
   return 0;
 }
@@ -291,6 +295,7 @@ int LinxESP32::SpiWriteRead(unsigned char channel, unsigned char frameSize, unsi
     }
     //Frame Complete, Set CS idel
     digitalWrite(csChan, (~csLL & 0x01) );
+    DebugPrintln("In the right method");
   }
   return 0;
 }

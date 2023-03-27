@@ -54,7 +54,6 @@ static const int spiClk = 1000000; // 1 MHz
 //#include "utility/LinxArduino.h"
 #include <LinxESP32WifiListener.h>
 #include <LinxSerialListener.h>
-//#include <SPI.h>
 
 class LinxESP32 : public LinxWiringDevice
 {

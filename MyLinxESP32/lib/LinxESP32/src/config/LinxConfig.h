@@ -15,7 +15,7 @@
 
 #define DEBUG_ENABLED 0
 //#define NUM_I2C_CHANS 2
-//#define NUM_SPI_CHANS 3
+#define NUM_SPI_CHANS 2 // Only VSPI and hSPI
 #define NUM_UART_CHANS 4
 #define DEVICE_FAMILY 0xAE //7
 
@@ -36,8 +36,8 @@
   #define HSPI_SCLK   25
   #define HSPI_SS     32
 #else
-  #define VSPI_MISO   19 //MISO
-  #define VSPI_MOSI   23 //MOSI
+  #define VSPI_MISO   23 //MISO
+  #define VSPI_MOSI   19 //MOSI
   #define VSPI_SCLK   18 //SCK
   #define VSPI_SS     5 //SS
 

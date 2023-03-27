@@ -33,7 +33,7 @@
 #define DEFAULT 0
 #endif
 
-#include <SPI.h>
+//#include <SPI.h>
 #include <Wire.h>
 #include <EEPROM.h>
 #include <BluetoothSerial.h>
@@ -404,6 +404,7 @@ int LinxWiringDevice::SpiWriteRead(unsigned char channel, unsigned char frameSiz
     //Frame Complete, Set CS idel
     digitalWrite(csChan, (~csLL & 0x01) );
   }
+  DebugPrintln("I the wrong write");
   return 0;
 }
 
